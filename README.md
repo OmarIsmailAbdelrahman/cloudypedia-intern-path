@@ -77,8 +77,8 @@ milestone per round. The board below is the at-a-glance progress view.
 ## Status board / task tracker
 
 Tick a box when a template is **built and passing local checks** (`make check` + its smoke test), committed
-on a merged PR. Peer-review and the optional cloud-verify happen on each PR and in supervised GCP sessions
-(coordinated by your mentor). `*` = the stage's flagship (build it first). Items marked
+on a merged PR. Your mentor's review and the optional cloud-verify happen on each PR and in supervised GCP
+sessions. `*` = the stage's flagship (build it first). Items marked
 _(stretch)_ are the backlog — pull them once a stage's core set is done.
 
 ### 00 — reference
@@ -174,5 +174,5 @@ _(stretch)_ are the backlog — pull them once a stage's core set is done.
 1. **It must run locally.** No task depends on cloud access; real-GCP steps are optional/supervised and
    live under each README's `## Cloud-verify only`.
 2. **Never commit secrets.** `config/` holds `<PLACEHOLDER>`s only; the checker scans for leaks.
-3. **One template per PR**, green CI (`make lint check test`), reviewed by a different intern.
+3. **One template per PR**, green CI (`make lint check test`), reviewed and approved by your mentor.
 4. **Conform to the anatomy** — `make check` must pass before you open a PR.

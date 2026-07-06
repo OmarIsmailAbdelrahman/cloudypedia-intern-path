@@ -60,7 +60,7 @@ templates/NN-stage/<your-template>/
 5. **Write a smoke test that asserts behaviour** (not just "the file exists"). Put the pure logic in a
    function and test it.
 6. **Green up:** `make lint check test` must pass.
-7. **Open a PR** (one template). Fill the checklist. A *different* intern reviews it.
+7. **Open a PR** (one template). Fill the checklist. Your **mentor** reviews and approves it.
 8. **Merge** (squash), then tick your row on the README status board.
 
 ## 5. Concept docs (part of the job)
@@ -75,7 +75,7 @@ contract). Documenting the concept is half the point of the internship.
 - **Never commit secrets.** No real keys, tokens, passwords, or service-account JSON. `config/` is
   placeholders only. `.gitignore` and the checker help, but *you* are the last line of defence.
 - **Don't touch the GCP console without supervision.** Ask first — always.
-- **One template per PR**, reviewed by someone else, CI green before merge.
+- **One template per PR**, reviewed and approved by your mentor, CI green before merge.
 
 ## 7. Stuck?
 

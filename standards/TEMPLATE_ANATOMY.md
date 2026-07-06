@@ -27,5 +27,5 @@ templates/NN-stage/<template-name>/
 - [ ] Smoke test passes locally.
 - [ ] README complete with all four required sections.
 - [ ] `config/` has no secrets (only `<PLACEHOLDER>` / `.env.example`).
-- [ ] Peer-reviewed via PR against `CONVENTIONS.md`.
+- [ ] Reviewed and approved by your mentor via PR.
 - [ ] (Optional) Cloud-verify step logged, if platform access was available.

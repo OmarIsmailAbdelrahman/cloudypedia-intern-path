@@ -4,5 +4,5 @@
 - [x] Smoke test passes locally (`python -m pytest tests`).
 - [x] README complete with all four required sections.
 - [x] `config/` has no secrets (placeholders only).
-- [ ] Peer-reviewed via PR against `CONVENTIONS.md`.
+- [ ] Reviewed and approved by your mentor.
 - [x] Cloud-verify: not applicable.
