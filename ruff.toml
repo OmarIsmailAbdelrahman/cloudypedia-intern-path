@@ -1,0 +1,13 @@
+line-length = 100
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "I", "UP", "B"]
+# UP017 forces datetime.UTC (3.11+ only); keep timezone.utc so templates run on 3.10 too.
+ignore = ["UP017"]
+
+[lint.per-file-ignores]
+# Templates are illustrative teaching artifacts: allow long example lines,
+# import-after-setup (sys.path / importorskip), FastAPI-style call-in-default,
+# and simplified example error handling. Core tooling (tools/) stays strict.
+"templates/**" = ["E501", "B008", "E402", "B904"]

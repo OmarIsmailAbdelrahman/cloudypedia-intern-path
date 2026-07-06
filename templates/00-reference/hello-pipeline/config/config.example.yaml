@@ -1,0 +1,3 @@
+# Copy to config.yaml and fill in. Never commit real values.
+input_path: "<PLACEHOLDER_INPUT_PATH>"
+output_path: "<PLACEHOLDER_OUTPUT_PATH>"

@@ -1,0 +1,73 @@
+# ─── Python ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ─── Virtual environments ────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Secrets & credentials (NEVER commit real values) ────
+# Keep example/placeholder files; ignore the real ones.
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*-key.json
+*-sa.json
+service-account*.json
+*credentials*.json
+application_default_credentials.json
+gha-creds-*.json
+config/config.yaml
+config/*.local.*
+
+# ─── GCP / IaC local state ───────────────────────────────
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# ─── Node (custom-viz builds) ────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ─── Airflow local runtime (Stage 04) ────────────────────
+airflow.db
+airflow.cfg
+airflow-webserver.pid
+standalone_admin_password.txt
+logs/
+
+# ─── Local data / scratch ────────────────────────────────
+out/
+*.duckdb
+*.duckdb.wal
+/tmp/
+
+# ─── Agent / tooling scratch (not part of the deliverable)─
+.superpowers/
+
+# ─── OS & editor ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*~

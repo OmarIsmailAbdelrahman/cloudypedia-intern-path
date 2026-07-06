@@ -1,0 +1,13 @@
+# Routes review to the stage owner + lead. Replace @handles.
+/standards/                 @lead
+/tools/                     @lead
+/.github/                   @lead
+/templates/00-reference/    @lead
+/templates/01-ingestion/    @intern-b @lead
+/templates/02-bigquery/     @intern-c @lead
+/templates/03-dataplex/     @intern-b @lead
+/templates/04-airflow/      @intern-b @lead
+/templates/05-dataflow/     @intern-a @lead
+/templates/06-vertex/       @intern-a @lead
+/templates/07-looker/       @intern-c @lead
+/templates/08-custom-viz/   @intern-c @lead
