@@ -1,178 +1,127 @@
-# Data Engineering Starter-Kit
+# Clinical Data Platform — Engagement Build
 
-A **local-first library of reusable GCP data-engineering templates**, built and used by data-engineering
-interns alongside the Google **Professional Data Engineer** certificate path. Each template is a
-self-contained folder holding a working solution's *structure* + a *runnable local example* + *docs* — so
-future projects start from a battle-tested pattern instead of a blank page.
-
-**New here? Read in this order:** [`docs/INTERN_ONBOARDING.md`](docs/INTERN_ONBOARDING.md) →
-[`standards/TEMPLATE_ANATOMY.md`](standards/TEMPLATE_ANATOMY.md) →
-[`standards/CONVENTIONS.md`](standards/CONVENTIONS.md) →
-[`CONTRIBUTING.md`](CONTRIBUTING.md) → the [`templates/00-reference/hello-pipeline`](templates/00-reference/hello-pipeline) example.
+> A hands-on data-engineering program. You will build a real end-to-end data platform for a client,
+> one stage at a time, on Google Cloud.
 
 ---
 
-## Quick start
+## The project
+
+**Who we are.** We are a data-solutions consultancy. We take on large organizations with high-volume data,
+where **confidentiality, professionalism, and domain understanding** are non-negotiable.
+
+**The engagement.** A **national health authority** has contracted us to build their **ETL and reporting
+infrastructure**. The authority collects clinical data from **source hospitals** and today has no unified way
+to process, trust, or report on it. Our job is to stand up that platform end to end.
+
+**What the client gave us.** To get us moving, the authority delivered a **representative extract of the data
+in a Cloud Storage bucket** — real-shape hospital and ICU records (patients, admissions, ICU stays, vitals,
+labs, medications, diagnoses). Two things are true of this data, and they shape everything we build:
+
+- **It is messy.** Like all real clinical data, it carries data-quality problems — bad formats, impossible
+  values, missing links, duplicates. Part of our job is to *find and handle* them, not assume clean input.
+- **It is sensitive.** It is patient health information. Confidential handling and governance are a
+  requirement at every stage, not an afterthought.
+
+**Our deliverable.** A working platform that turns this raw extract into **trustworthy, query-ready reporting**
+— ingestion, storage, quality, orchestration, transformation, analytics, and the reporting layer on top.
+
+> **One thing we do *not* hand you: the reporting model.** The analytics/semantic layer is designed the way
+> real practitioners do it — in a **working session with your mentor, building a Kimball bus matrix** to decide
+> the business processes, grain, facts, and dimensions. That stage gives you the *method*, not the answer.
+> Every other stage comes with an explicit objective for what it must deliver.
+
+---
+
+## How a data system looks
+
+Before the tools, the shape. Almost every data platform is the same handful of layers — data flows left to
+right, with two concerns running underneath the whole thing:
+
+```
+  SOURCES ─▶ INGESTION ─▶ STORAGE ─▶ PROCESSING ─▶ ANALYTICS ─▶ REPORTING
+                             │            │            │
+                        ┌────┴────────────┴────────────┴────┐
+                        │  QUALITY & GOVERNANCE (trust)      │
+                        │  ORCHESTRATION (coordination)      │
+                        └────────────────────────────────────┘
+```
+
+| Layer | What it is responsible for | You build it in |
+|---|---|---|
+| **Ingestion** | Get source data into the platform reliably | [`01-ingestion`](templates/01-ingestion/) |
+| **Storage & modeling** | Land the data in the warehouse and shape it for analytics | [`02-bigquery`](templates/02-bigquery/) |
+| **Quality & governance** | Profile, validate, catch bad data; govern sensitive data | [`03-dataplex`](templates/03-dataplex/) |
+| **Orchestration** | Schedule and coordinate the whole pipeline | [`04-airflow`](templates/04-airflow/) |
+| **Processing at scale** | Transform large volumes of data efficiently | [`05-dataflow`](templates/05-dataflow/) |
+| **Machine learning** | Build and serve a predictive model on the data | [`06-vertex`](templates/06-vertex/) |
+| **Reporting (BI)** | Dashboards and self-serve analytics for the client | [`07-looker`](templates/07-looker/) |
+| **Custom visualization** | Bespoke views beyond what BI tools give you | [`08-custom-viz`](templates/08-custom-viz/) |
+
+---
+
+## The pipeline — navigation
+
+Each stage is its own folder with a README that states the **goal**, the **tools** and **why**, **alternative
+tools**, and its **task tracking**. Start at 01 and work down; each builds on the last.
+
+| # | Stage | Tool | What you'll deliver |
+|---|---|---|---|
+| 01 | [Ingestion](templates/01-ingestion/) | Cloud Storage | Land the client's data extract into our platform, reliably and repeatably |
+| 02 | [Storage & modeling](templates/02-bigquery/) | BigQuery | Warehouse the data and design the analytics model *(Kimball bus matrix, with mentor)* |
+| 03 | [Quality & governance](templates/03-dataplex/) | Dataplex | Profile and validate the data; surface the quality issues; govern sensitive fields |
+| 04 | [Orchestration](templates/04-airflow/) | Cloud Composer (Airflow) | Schedule and wire the pipeline into one coordinated run |
+| 05 | [Processing at scale](templates/05-dataflow/) | Dataflow (Beam) | Process large data volumes with a scalable transform |
+| 06 | [Machine learning](templates/06-vertex/) | Vertex AI | Train and serve a predictive model on the clinical data |
+| 07 | [Reporting](templates/07-looker/) | Looker | Deliver the client's dashboards on the analytics model |
+| 08 | [Custom visualization](templates/08-custom-viz/) | (custom) | Build a bespoke visualization the BI tool can't |
+
+---
+
+## Build status
+
+Track progress here — one row per stage. (`⬜ not started · 🟡 in progress · ✅ approved by mentor`)
+
+| Stage | Status |
+|---|---|
+| 01 — Ingestion | ⬜ |
+| 02 — Storage & modeling | ⬜ |
+| 03 — Quality & governance | ⬜ |
+| 04 — Orchestration | ⬜ |
+| 05 — Processing at scale | ⬜ |
+| 06 — Machine learning | ⬜ |
+| 07 — Reporting | ⬜ |
+| 08 — Custom visualization | ⬜ |
+
+---
+
+## How you'll work
+
+- **Stage by stage.** Build in order. Don't jump ahead — each stage depends on the one before it.
+- **Local-first.** Everything is designed to build and run on your machine; cloud work is supervised.
+- **Confidentiality always.** Treat the data as real patient information. Governance and careful handling
+  are part of the grade, not a bonus.
+- **The mentor approves.** Open a pull request when a stage is done; your **mentor reviews and approves** it
+  (not another intern). A stage is ✅ only after that approval.
+- **Requirements can change.** Like any real engagement, the client's needs can evolve mid-project. Build for
+  change, not just for today's spec.
+
+---
+
+## Getting started
 
 ```bash
-git clone <this-repo> && cd cloudypedia-intern-path
+git clone <this-repo> && cd <this-repo>
 make setup            # install dev deps (Python 3.11+)
-pre-commit install    # enable ruff + template-conformance checks before each commit
-make lint check test  # everything should be green
+pre-commit install    # enable checks before each commit
+make lint check test  # should be green
 ```
 
-> **`make`?** It's just a task-runner shortcut (see "About `make`" below) — every `make X` maps to a plain
-> command you can also run directly. It is **not** part of what you build; it only saves typing.
+Then read, in order:
+[`docs/INTERN_ONBOARDING.md`](docs/INTERN_ONBOARDING.md) →
+[`standards/TEMPLATE_ANATOMY.md`](standards/TEMPLATE_ANATOMY.md) →
+[`standards/CONVENTIONS.md`](standards/CONVENTIONS.md) →
+[`CONTRIBUTING.md`](CONTRIBUTING.md), and open the worked example at
+[`templates/00-reference/hello-pipeline`](templates/00-reference/hello-pipeline).
 
-Then open the reference template to learn the shape every template follows:
-```bash
-cd templates/00-reference/hello-pipeline && bash local/run_local.sh && python -m pytest tests -q
-```
-
-## Verify locally (the gates every template must pass)
-
-| `make` command | Runs | What it checks |
-|----------------|------|----------------|
-| `make setup` | `pip install -r requirements-dev.txt` | install dev dependencies |
-| `make lint`  | `ruff check .` | style/quality — strict on `tools/`, relaxed on illustrative `templates/` |
-| `make check` | `python tools/check_template.py templates/*/*/` | every template conforms to the anatomy + has no committed secrets |
-| `make test`  | `pytest` over tooling + every template's `tests/` | tooling + the reference example; each template's tests run once you add them |
-
-A single template: `cd templates/<NN-stage>/<template> && python -m pytest tests -q`.
-
-## About `make`
-
-`make` is a tiny, decades-old command-line **task runner** (GNU Make) — not a library, not something this
-project ships. The `Makefile` in the repo root just defines named shortcuts (`setup`, `lint`, `check`,
-`test`) so nobody has to memorise the long commands. It's pre-installed on macOS and Linux; on Windows use
-WSL or Git Bash. **You never need `make`** — the table above shows the exact command each target runs, so
-`make check` and `python tools/check_template.py templates/*/*/` are identical.
-
-## Repository structure
-
-```
-├── README.md               ← you are here (the front door)
-├── CONTRIBUTING.md         ← branching, commits, PR flow, Definition of Done
-├── CODEOWNERS              ← review routing (REPLACE the @handles with real usernames)
-├── Makefile · ruff.toml · requirements-dev.txt · .pre-commit-config.yaml
-├── .github/                ← CI workflow + PR / issue templates
-├── standards/              ← the shared contract every template obeys
-│   ├── TEMPLATE_ANATOMY.md ·  CONVENTIONS.md ·  CONCEPTS/  (per-stage concept explainers)
-├── tools/                  ← check_template.py (the conformance gate) + its tests
-├── templates/              ← the deliverable: 8 stages × their templates (see task tracker)
-└── docs/
-    └── INTERN_ONBOARDING.md ← how to get started
-```
-
-Each `templates/NN-stage/<template>/` folder follows the same anatomy: `README.md` (with **What it is /
-Input-output contract / Run locally / Cloud-verify only**), `src/`, `local/`, `sample_data/`, `config/`
-(placeholders only — **never real secrets**), `tests/`, `docs/`, `DONE.md`.
-
-## Ownership & tracking
-
-Each intern owns a stage and becomes the team's go-to person for that tool. Work is tracked as GitHub
-issues — one per template, using the *new-template* issue form — labelled per stage and grouped into a
-milestone per round. The board below is the at-a-glance progress view.
-
-## Status board / task tracker
-
-Tick a box when a template is **built and passing local checks** (`make check` + its smoke test), committed
-on a merged PR. Your mentor's review and the optional cloud-verify happen on each PR and in supervised GCP
-sessions. `*` = the stage's flagship (build it first). Items marked
-_(stretch)_ are the backlog — pull them once a stage's core set is done.
-
-### 00 — reference
-- [x] hello-pipeline
-
-### 01 — Ingestion
-- [ ] pubsub-streaming-pull *
-- [ ] synthetic-event-generator
-- [ ] gcs-batch-load
-- [ ] pubsub-to-bigquery-subscription
-- [ ] external-biglake-table
-- [ ] sql-database-replication
-- [ ] concept doc → `standards/CONCEPTS/01-ingestion/`
-- [ ] pubsub-push _(stretch)_
-- [ ] pubsub-schema _(stretch)_
-- [ ] pubsub-storage-write-api _(stretch)_
-- [ ] pubsub-to-gcs-subscription _(stretch)_
-- [ ] bq-data-transfer-autoload _(stretch)_
-
-### 02 — BigQuery
-- [ ] scd-upsert-merge *
-- [ ] 3-tier-ddl
-- [ ] staging-transform
-- [ ] mart-model
-- [ ] query-cookbook
-- [ ] concept doc → `standards/CONCEPTS/02-bigquery/`
-- [ ] table-lifecycle _(stretch)_
-- [ ] cost-and-tuning _(stretch)_
-
-### 03 — Dataplex
-- [ ] dq-ruleset-local-validator *
-- [ ] lake-zone-asset-discovery
-- [ ] profiling-config
-- [ ] catalog-tagging-lineage
-- [ ] access-control-and-security
-- [ ] feature-survey
-- [ ] concept doc → `standards/CONCEPTS/03-dataplex/`
-- [ ] lineage (split out) _(stretch)_
-- [ ] business-glossary _(stretch)_
-- [ ] data-insights _(stretch)_
-
-### 04 — Airflow
-- [ ] integrator-dag *
-- [ ] local-airflow-dev-env
-- [ ] dag-authoring-skeleton
-- [ ] gcp-operator-patterns-library
-- [ ] custom-operator-template
-- [ ] general-reference-dag
-- [ ] concept doc → `standards/CONCEPTS/04-airflow/`
-- [ ] scheduling-and-assets _(stretch)_
-- [ ] connections-secrets-reliability _(stretch)_
-
-### 05 — Dataflow
-- [ ] dataflow-streaming-template *
-- [ ] dataflow-batch-template
-- [ ] dataflow-custom-container
-- [ ] gcp-connectors-reference
-- [ ] concept doc → `standards/CONCEPTS/05-dataflow/`
-- [ ] storage-write-api-variants _(stretch)_
-- [ ] parameterized-pipeline _(stretch)_
-- [ ] extra-sinks _(stretch)_
-
-### 06 — Vertex
-- [ ] custom-serving-container *
-- [ ] custom-training-container
-- [ ] endpoint-deploy-config
-- [ ] batch-and-streaming-prediction
-- [ ] concept doc → `standards/CONCEPTS/06-vertex/`
-- [ ] custom-prediction-routines (CPR) _(stretch)_
-- [ ] hyperparameter-tuning-job _(stretch)_
-- [ ] ab-traffic-split _(stretch)_
-
-### 07 — Looker
-- [ ] relational-to-dimensional-conversion-guide *
-- [ ] project-skeleton
-- [ ] view-from-bq-table
-- [ ] explore-and-joins
-- [ ] concept doc → `standards/CONCEPTS/07-looker/`
-- [ ] derived-tables-and-pdts _(stretch)_
-- [ ] governance-and-refinements _(stretch)_
-
-### 08 — Custom viz
-- [ ] custom-viz-skeleton *
-- [ ] mock-data-preview-harness
-- [ ] options-config
-- [ ] d3-chart-example
-- [ ] concept doc → `standards/CONCEPTS/08-custom-viz/`
-- [ ] standalone-bq-viz _(stretch)_
-- [ ] extension-framework-starter _(stretch)_
-
-## Golden rules (full detail in CONTRIBUTING.md)
-
-1. **It must run locally.** No task depends on cloud access; real-GCP steps are optional/supervised and
-   live under each README's `## Cloud-verify only`.
-2. **Never commit secrets.** `config/` holds `<PLACEHOLDER>`s only; the checker scans for leaks.
-3. **One template per PR**, green CI (`make lint check test`), reviewed and approved by your mentor.
-4. **Conform to the anatomy** — `make check` must pass before you open a PR.
+Then go to [**Stage 01 — Ingestion**](templates/01-ingestion/) and begin.
