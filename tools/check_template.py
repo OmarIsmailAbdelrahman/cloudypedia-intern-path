@@ -21,7 +21,7 @@ REQUIRED_DIRS_OPS = ["scripts", "docs"]
 REQUIRED_SECTIONS_OPS = [
     "## Goal",
     "## Context & scope",
-    "## Output & expectations",
+    "## Output",  # matches both "Output & expectations" (old) and "Output & Deliverables" (new format)
 ]
 SECRET_PATTERNS = [
     # Generic PEM-style key block header -- already covers RSA/EC/OPENSSH/ENCRYPTED/PGP variants

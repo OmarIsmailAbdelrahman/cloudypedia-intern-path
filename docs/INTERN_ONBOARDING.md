@@ -44,6 +44,17 @@ You run real cloud work on **your own project**, on free credit:
 6. **Open a PR** (one task). The **tech lead** reviews and approves.
 7. **Merge**, then tick your row on the README status board.
 
+## Automated checks (cloud-verify)
+
+When you push a task, GitHub Actions runs an **acceptance check** against **your own project** and
+reports pass/fail on the PR — for the initial load, for instance, it confirms every source table is
+present with matching columns and row counts. The check enforces the task's `## Output & expectations`,
+nothing more, and you can't peek at an answer key (it compares your result straight against the source).
+
+A one-time setup makes those checks able to reach your project (a service account + a couple of
+secrets, done in **your fork**): follow **[Cloud testing with GitHub Actions](CI_CLOUD_TESTING.md)**.
+The other workflow (`ci` — lint + structure + local tests) always runs and needs no setup.
+
 ## What a task folder looks like
 
 ```
@@ -67,6 +78,7 @@ Start at [**Stage 01 — Ingestion**](../templates/01-ingestion/).
 ## Definition of done (per task)
 
 - The task's stated output exists and works on your project.
+- The **`cloud-verify` check passes** on your PR (where the stage has one — see the note in `checks/README.md`).
 - `scripts/` committed; `docs/` written (your steps + decisions).
 - No data or secrets committed; sensitive data stayed inside your project.
 - Reviewed and approved by the tech lead via PR.
