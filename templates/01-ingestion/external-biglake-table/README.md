@@ -1,35 +1,31 @@
 # Task — Query the extract in place (external / BigLake)
 
 ## Goal
-Make the extract queryable from BigQuery without copying it.
+Make the extract queryable straight from BigQuery — without moving or copying a single file.
 
-## Context
-Sometimes we want to inspect or validate the data where it sits before committing to a load.
-
-## Scope of work
-Define external/BigLake tables over the extract files so they can be queried with SQL, and understand when
-querying in place beats a native load.
+## Context & scope
+Before committing to a full load, it's often smarter to look at the data where it already sits. BigQuery can
+read files in Cloud Storage in place through external (and BigLake) tables, so you can profile and sanity-check
+the extract with plain SQL. Stand those tables up over the initial files, and get a feel for when reading in
+place is the right call versus loading natively.
 
 ## Inputs & names
-The same extract files in the client's Cloud Storage bucket.
+The same sharded files under `gs://internship-preperation/Dataset/initial/<table>/*`.
 
-## Target
-External/BigLake tables in a BigQuery dataset, pointing at the files.
-
-## Expectation
-Each table returns the same data as the files, with nothing copied.
-
-## Output
-The script(s) that create the external tables.
+## Output & expectations
+External/BigLake tables in your dataset that point at the files and return exactly what's in them — with
+nothing copied into BigQuery storage. You deliver the script(s) that create them.
 
 ## Bonus
-Add a BigLake connection with metadata caching or fine-grained access.
+- Back the tables with a BigLake connection to add metadata caching or fine-grained access control.
 
-## References / Additional reading
-TBD.
+## References
+- External tables on Cloud Storage — https://cloud.google.com/bigquery/docs/external-data-cloud-storage
+- Create Cloud Storage BigLake tables — https://cloud.google.com/bigquery/docs/create-cloud-storage-table-biglake
+- BigLake introduction — https://cloud.google.com/bigquery/docs/biglake-intro
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Source bucket: `<PLACEHOLDER>`
-- Dataset: `<PLACEHOLDER>`
-- Connection: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Source bucket: `gs://internship-preperation/Dataset/initial/`
+- Dataset: `<your dataset>`
+- BigLake connection: `<your-connection-id>`

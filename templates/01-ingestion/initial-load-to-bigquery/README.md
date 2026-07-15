@@ -1,40 +1,39 @@
 # Task — Load the initial extract into BigQuery
 
 ## Goal
-Get the client's initial database export out of Cloud Storage and into BigQuery as tables the rest of the
-platform can build on.
+Land the client's initial data export in BigQuery — cleanly, completely, and repeatably — as the foundation
+every later stage builds on.
 
-## Context
-This is the one-time historical snapshot the client handed us to start. Batches and streaming come in later
-tasks — here you deal only with the initial export.
-
-## Scope of work
-Load every table from the initial export into a BigQuery dataset, one table per source table, preserving the
-data faithfully. The load must be repeatable — running it again must not duplicate or corrupt anything. Do not
-stage the data into a separate "raw" layer.
+## Context & scope
+The client gave us a head start: a one-time export of their operational database, dropped as files in Cloud
+Storage. It's history — a frozen snapshot — but it's also the first real data on the platform, and everything
+downstream inherits whatever you land here. Move all of it into BigQuery, one table per source table, faithful
+to the original: right columns, right types, nothing dropped or mangled. Make the load idempotent — running it
+twice should leave the warehouse exactly as running it once. Don't invent a separate "raw" staging layer; load
+straight into the dataset.
 
 ## Inputs & names
-The initial export sits in the client's Cloud Storage bucket under the `initial/` path, one folder per source
-table, each table split across several sharded files.
+The export lives under `gs://internship-preperation/Dataset/initial/`, with one folder per source table
+(`initial/<table>/`) and each table split across several sharded files (`<table>/*`). Expect roughly 31 tables
+spanning the `hosp` and `icu` modules of the clinical dataset.
 
-## Target
-A BigQuery dataset holding the initial extract (exact dataset/naming coordinated with Stage 02).
-
-## Expectation
-Every source table present, fully loaded with correct types, row counts matching the source; re-running the
-load is safe.
-
-## Output
-The populated dataset, plus the script(s) you write under `scripts/`.
+## Output & expectations
+A BigQuery dataset in your project holding every source table, fully populated with correct types and row
+counts that match the source exactly — and a load you can re-run without creating duplicates or corruption. The
+dataset's name and layout are settled in Stage 02 · Dataset & tier design. You deliver the load script(s) in
+`scripts/`.
 
 ## Bonus
-Load the tables in parallel to go faster; and make it resilient — if one table fails, skip it and continue the
-rest, reporting which failed (no whole-run abort).
+- Load the tables in parallel to cut the total time.
+- Make it fault-tolerant: if one table fails, skip it, keep going, and report which one broke — never abort the
+  whole run.
 
-## References / Additional reading
-TBD.
+## References
+- Loading data from Cloud Storage — https://cloud.google.com/bigquery/docs/loading-data-cloud-storage
+- Batch loading & URI wildcards — https://cloud.google.com/bigquery/docs/batch-loading-data
+- `bq load` reference — https://cloud.google.com/bigquery/docs/reference/bq-cli-reference#bq_load
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Source bucket: `<PLACEHOLDER>`
-- Target dataset: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Source bucket: `gs://internship-preperation/Dataset/initial/`
+- Target dataset: `<dataset from Stage 02>` (same region as the bucket)

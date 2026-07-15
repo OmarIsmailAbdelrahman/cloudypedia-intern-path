@@ -1,30 +1,29 @@
 # Task — Staging dataset
 
 ## Goal
-Give incoming batches a landing area before they're reconciled into the main tables.
+Give arriving batches a safe place to land before they touch the real tables.
 
-## Context
-Required by [Stage 01 · Batch incremental ingestion](../../01-ingestion/batch-incremental-ingestion/). Batches
-can't be appended blindly — they land in staging first.
-
-## Scope of work
-Define the staging dataset and how a batch is placed there prior to merge.
+## Context & scope
+Batches can't be appended blind — you need somewhere to put a fresh batch, inspect it, and reconcile it before
+it reaches the main tables. Define that staging area and how a batch is placed into it ahead of the merge. It's
+the landing spot [Stage 01 · Batch incremental ingestion](../../01-ingestion/batch-incremental-ingestion/)
+writes to.
 
 ## Inputs & names
-Batch data from Stage 01's batch-ingestion task.
+Batch data arriving from Stage 01 (`gs://internship-preperation/Dataset/batch/`).
 
-## Target
-A staging dataset.
+## Output & expectations
+A staging dataset where a batch can sit, ready to reconcile, without yet altering the main tables. You deliver
+the script(s) that define and populate staging.
 
-## Expectation
-A batch can be staged and is ready to reconcile without touching the main tables yet.
+## Bonus
+- Give staging tables an automatic expiration so old batches clean themselves up and don't cost storage.
 
-## Output
-The script(s) that define/populate staging.
-
-## References / Additional reading
-TBD.
+## References
+- Datasets — https://cloud.google.com/bigquery/docs/datasets
+- Managing tables — https://cloud.google.com/bigquery/docs/managing-tables
+- Batch loading — https://cloud.google.com/bigquery/docs/batch-loading-data
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Staging dataset: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Staging dataset: `<you define>`

@@ -1,34 +1,30 @@
 # Task — Validate the ingestion (manifest)
 
 ## Goal
-Prove a load is complete and correct, not silently partial.
+Turn "the load looks fine" into proof — a check that fails loudly the moment ingestion is incomplete.
 
-## Context
-Loads can miss a table, drop shards, or truncate — we need to catch that automatically.
-
-## Scope of work
-Check that every expected table arrived and that its row counts match what was delivered; fail loudly and name
-the table that's off.
+## Context & scope
+A load can quietly go wrong: a table missing, a shard skipped, a file truncated. You can't eyeball 31 tables
+after every run, so build the check that does it for you — confirming every expected table arrived and that
+each one's row count matches what was delivered, and calling out by name anything that doesn't add up.
 
 ## Inputs & names
-The loaded dataset plus the source files.
+The loaded dataset in your project, plus the source files under
+`gs://internship-preperation/Dataset/initial/<table>/`.
 
-## Target
-A pass/fail validation result.
-
-## Expectation
-Passes only when all tables are present and counts match; on mismatch it names the offender.
-
-## Output
-The validation script(s).
+## Output & expectations
+A validation that passes only when every table is present and every count matches, and on any mismatch names
+the offending table instead of failing vaguely. You deliver the validation script(s).
 
 ## Bonus
-Emit a per-table expected-vs-actual summary.
+- Print a per-table expected-vs-actual summary so a failure is diagnosable at a glance.
 
-## References / Additional reading
-TBD.
+## References
+- `INFORMATION_SCHEMA.TABLES` — https://cloud.google.com/bigquery/docs/information-schema-tables
+- Table storage metadata — https://cloud.google.com/bigquery/docs/information-schema-table-storage
+- List objects with `gcloud storage ls` — https://cloud.google.com/sdk/gcloud/reference/storage/ls
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Dataset: `<PLACEHOLDER>`
-- Source bucket: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Dataset: `<your dataset>`
+- Source bucket: `gs://internship-preperation/Dataset/initial/`

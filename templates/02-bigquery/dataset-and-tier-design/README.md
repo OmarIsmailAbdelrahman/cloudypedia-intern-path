@@ -1,31 +1,31 @@
 # Task — Dataset & tier design
 
 ## Goal
-Define the BigQuery datasets the platform uses and the conventions for them.
+Lay the warehouse's foundation — the datasets and conventions every other task will build on.
 
-## Context
-Every later task needs a clear place to write; this is where the initial-extract dataset from Stage 01 is
-actually defined.
-
-## Scope of work
-Design the datasets (including where the initial extract lands), plus naming, partitioning, and clustering
-conventions the platform will follow.
+## Context & scope
+Before anyone loads, merges, or reports, the warehouse needs structure. Decide the datasets the platform will
+use — including where the initial extract from Stage 01 actually lands — and set the conventions that keep it
+coherent: naming, partitioning, and clustering. Choices here ripple through every later stage, so make them
+deliberately rather than by default.
 
 ## Inputs & names
-The tables landed by Stage 01.
+The tables landed by [Stage 01 · Initial load](../../01-ingestion/initial-load-to-bigquery/). Keep the datasets
+in the same region as the `gs://internship-preperation/Dataset/` bucket.
 
-## Target
-The defined BigQuery datasets plus a documented set of conventions.
+## Output & expectations
+Datasets that exist with consistent names, partition and cluster choices you can justify, and a location that
+matches the bucket so loads work. You deliver the creation script(s) and a short conventions note in `docs/`.
 
-## Expectation
-Datasets exist with consistent naming; partition/cluster choices are justified.
+## Bonus
+- Add dataset labels and descriptions, and record why you chose each partition/cluster key as a short note.
 
-## Output
-The script(s) that create the datasets, and any conventions notes.
-
-## References / Additional reading
-TBD.
+## References
+- Datasets — https://cloud.google.com/bigquery/docs/datasets
+- Partitioned tables — https://cloud.google.com/bigquery/docs/partitioned-tables
+- Clustered tables — https://cloud.google.com/bigquery/docs/clustered-tables
+- Dataset locations — https://cloud.google.com/bigquery/docs/locations
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Dataset names: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Dataset names + location: `<you define>`

@@ -1,29 +1,28 @@
 # Task — Query cookbook
 
 ## Goal
-Build a set of reusable, cost-aware query patterns for the warehouse.
+Capture the warehouse's good habits as reusable, cost-aware queries.
 
-## Context
-The team should share good BigQuery habits (partition pruning, cost control, windowing).
-
-## Scope of work
-Produce a small library of documented query patterns against the curated data.
+## Context & scope
+Everyone will query this data, and BigQuery rewards — and punishes — how you do it. Build a small, documented
+library of query patterns over the curated data that show the team how to work efficiently: pruning
+partitions, keeping cost down, and using window functions well.
 
 ## Inputs & names
-The curated dataset.
+The curated dataset (from [Curated / transform layer](../curated-transform-layer/)).
 
-## Target
-A cookbook of queries.
+## Output & expectations
+A cookbook of queries in `scripts/` that run correctly, stay cost-aware, and are documented well enough for the
+team to reuse.
 
-## Expectation
-Queries run, are cost-aware, and are documented for reuse.
+## Bonus
+- Annotate each query with its dry-run cost (bytes scanned) so readers see the price before they run it.
 
-## Output
-The query files.
-
-## References / Additional reading
-TBD.
+## References
+- Controlling costs — https://cloud.google.com/bigquery/docs/best-practices-costs
+- Query performance — https://cloud.google.com/bigquery/docs/best-practices-performance-overview
+- Window functions — https://cloud.google.com/bigquery/docs/reference/standard-sql/window-function-calls
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Datasets: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Dataset (curated): `<you define>`

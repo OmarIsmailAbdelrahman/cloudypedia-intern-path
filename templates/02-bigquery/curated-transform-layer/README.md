@@ -1,30 +1,29 @@
 # Task — Curated / transform layer
 
 ## Goal
-Shape the landed data into clean, analytics-ready tables.
+Turn landed data into clean, trustworthy tables the rest of the platform can rely on.
 
-## Context
-Downstream stages and reporting need tidy, typed, consistent tables — not raw dumps.
-
-## Scope of work
-Transform the landed tables into a curated layer (typing, cleaning, conforming) that later stages build on.
-The dimensional model itself is Looker's job; here it's the physical curated tables.
+## Context & scope
+What ingestion leaves behind is faithful but raw — inconsistent types, quirks, source-shaped naming.
+Downstream stages and reporting need better than that. Shape the landed tables into a curated layer that's
+typed, cleaned, and conformed. The dimensional model comes later, in Looker; here you're building the solid
+physical tables underneath it.
 
 ## Inputs & names
-The main tables.
+The main tables (initial load plus reconciled batches and stream).
 
-## Target
-A curated dataset of analytics-ready tables.
+## Output & expectations
+A curated dataset of analytics-ready tables — consistent, well-typed, and documented. You deliver the transform
+script(s) (SQL / `CREATE TABLE AS`).
 
-## Expectation
-Curated tables are consistent, typed, and documented.
+## Bonus
+- Make the transforms incremental — rebuild only what changed instead of the whole layer.
 
-## Output
-The transform script(s).
-
-## References / Additional reading
-TBD.
+## References
+- Data definition language (`CREATE TABLE AS`) — https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language
+- Scheduling queries — https://cloud.google.com/bigquery/docs/scheduling-queries
+- Working with tables — https://cloud.google.com/bigquery/docs/tables
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Datasets: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Datasets (main + curated): `<you define>`

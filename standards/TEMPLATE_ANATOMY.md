@@ -23,14 +23,13 @@ Every task is a self-contained folder under `<stage>/<task-name>/`. This is the 
 
 ## Required `README.md` sections (the scope)
 - `## Goal` — one sentence: what this task achieves.
-- `## Context` — where it sits in the stage's story.
-- `## Scope of work` — plain sentences describing what must be accomplished (no step-by-step walkthrough).
+- `## Context & scope` — where it sits in the story, and (plain sentences) what must be accomplished — no
+  step-by-step walkthrough.
 - `## Inputs & names` — where the data comes from and what it's called.
-- `## Target` — where the result lands.
-- `## Expectation` — what "correct and complete" means.
-- `## Output` — the deliverable the intern produces.
+- `## Output & expectations` — where the result lands, what "correct and complete" means, and the deliverable
+  the intern produces.
 - `## Config & naming` — required settings as inline placeholders.
-- *(Optional)* `## Bonus`, `## References / Additional reading`.
+- *(Optional)* `## Bonus`, `## References`.
 
 ## Required `DONE.md` checklist
 - [ ] The task's stated output exists and works on the intern's own GCP project.

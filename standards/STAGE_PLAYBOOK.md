@@ -11,14 +11,11 @@ in its folder README; each task's full scope is in that task's own README.
 2. **Task guide** (`templates/<stage>/<task>/README.md`) — the **scope** of one task. It states the goal and
    the target; it does **not** hand over the steps. Required sections:
    - `## Goal` — one sentence: what this task achieves.
-   - `## Context` — where it sits in the stage's story.
-   - `## Scope of work` — plain sentences describing what must be accomplished.
+   - `## Context & scope` — where it sits in the story + (plain sentences) what must be accomplished.
    - `## Inputs & names` — where the data comes from and what it's called.
-   - `## Target` — where the result lands.
-   - `## Expectation` — what "correct and complete" means.
-   - `## Output` — the deliverable the intern produces (e.g. scripts).
+   - `## Output & expectations` — where the result lands, what "correct and complete" means, and the deliverable.
    - `## Config & naming` — required settings as inline `<PLACEHOLDER>` values (no `config/` folder).
-   - *(optional)* `## Bonus`, `## References / Additional reading`.
+   - *(optional)* `## Bonus`, `## References`.
 3. **What the intern produces** — the **output** (for cloud-ops stages: scripts under `scripts/`) plus their
    **own `docs/`**. The `verify` / grading test is the **tech lead's**, kept private in `mentor-docs/` — never
    in the scaffold.

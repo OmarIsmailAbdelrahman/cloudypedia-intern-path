@@ -1,36 +1,34 @@
 # Task — Ingest the recurring batches (incremental)
 
 ## Goal
-Add the batch drops that arrive after the initial load, without duplicating data.
+Keep the warehouse current as new data arrives — folding in each batch without ever double-counting.
 
-## Context
-After the first snapshot the client keeps sending new batches; each must be merged into what's already there.
-
-## Scope of work
-Load a new batch incrementally and idempotently — new records added, no duplicates, existing data intact.
+## Context & scope
+The initial export was a one-off; real operations don't stop. The client keeps sending batches, and each one
+has to join what's already loaded without creating duplicates or disturbing existing rows. Build ingestion
+that takes a new batch and merges it in idempotently — safe to re-run, safe to replay.
 
 ## Inputs & names
-Batch extract files in the client's Cloud Storage bucket under the `batch/` path, same per-table shape as the
-initial export.
+Batch files under `gs://internship-preperation/Dataset/batch/<table>/*`, in the same per-table sharded shape as
+the initial export.
 
-## Target
-The same tables extended with batch rows. This needs a staging dataset — defined in Stage 02 (BigQuery); this
-task's final requirement points to [Stage 02 · Staging dataset](../../02-bigquery/staging-dataset/).
-
-## Expectation
-Tables hold initial + batch with no duplicates; re-running a batch is safe.
-
-## Output
-The batch-ingestion script(s).
+## Output & expectations
+Tables that hold the initial data plus every batch, with no duplicates and no damage when a batch is re-run.
+Doing this cleanly needs a place to stage and reconcile, which lives in Stage 02 — so this task's final
+requirement points to [Stage 02 · Staging dataset](../../02-bigquery/staging-dataset/) and
+[Stage 02 · SCD / upsert MERGE](../../02-bigquery/scd-upsert-merge/). You deliver the batch-ingestion
+script(s).
 
 ## Bonus
-Parallel load + skip-on-failure (as in the initial-load task).
+- Reuse the parallel-load and skip-on-failure approach from the initial-load task.
 
-## References / Additional reading
-TBD.
+## References
+- Batch loading (`WRITE_APPEND`) — https://cloud.google.com/bigquery/docs/batch-loading-data
+- `MERGE` for idempotent upserts — https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax#merge_statement
+- Partitioned tables — https://cloud.google.com/bigquery/docs/partitioned-tables
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Source bucket: `<PLACEHOLDER>`
-- Dataset: `<PLACEHOLDER>`
-- Staging dataset: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Source bucket: `gs://internship-preperation/Dataset/batch/`
+- Dataset: `<your dataset>`
+- Staging dataset: `<staging dataset from Stage 02>`

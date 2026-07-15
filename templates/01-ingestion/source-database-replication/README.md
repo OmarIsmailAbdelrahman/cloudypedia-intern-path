@@ -1,37 +1,32 @@
 # Task — Replicate a source database
 
 ## Goal
-Bring a live source-hospital SQL database into the platform.
+Bring a live operational database onto the platform — and keep it in sync.
 
-## Context
-Not every source is files — some are operational databases that must be replicated continuously.
-
-## Scope of work
-Set up replication from a source SQL database into BigQuery so changes flow through; understand
-change-data-capture vs full copy.
+## Context & scope
+Not every source hands us files. Some are running SQL databases we're expected to mirror continuously, so that
+changes on the source show up on the platform. Set up replication from a source database into BigQuery, and
+understand when continuous change-data-capture beats periodic full copies.
 
 ## Inputs & names
-A source SQL database. Connection details (username / password / host-ip) are provided by the tech lead — left
-blank for now.
+A source SQL database. Its connection details — host/ip, username, password — come from the tech lead and are
+left blank for now.
 
-## Target
-Replicated tables in BigQuery.
-
-## Expectation
-Source rows and changes appear in BigQuery and keep up.
-
-## Output
-The replication setup script(s)/config.
+## Output & expectations
+Replicated tables in BigQuery that track the source and keep up as it changes. You deliver the replication
+setup script(s) and config.
 
 ## Bonus
-Capture changes via CDC rather than full reloads.
+- Drive it with change-data-capture rather than repeated full reloads.
 
-## References / Additional reading
-TBD.
+## References
+- Datastream overview — https://cloud.google.com/datastream/docs/overview
+- Replicate to BigQuery (Datastream) — https://cloud.google.com/datastream/docs/quickstart-replication-to-bigquery
+- CDC behaviour — https://cloud.google.com/datastream/docs/behavior-overview
 
 ## Config & naming
-- Project: `<PLACEHOLDER>`
-- Dataset: `<PLACEHOLDER>`
+- Project: `<your-project-id>`
+- Dataset: `<your dataset>`
 - Source DB host/ip: `<TBD by tech lead>`
 - Source DB username: `<TBD by tech lead>`
 - Source DB password: `<TBD by tech lead>`

@@ -20,8 +20,8 @@ REQUIRED_SECTIONS_CODE = [
 REQUIRED_DIRS_OPS = ["scripts", "docs"]
 REQUIRED_SECTIONS_OPS = [
     "## Goal",
-    "## Scope of work",
-    "## Output",
+    "## Context & scope",
+    "## Output & expectations",
 ]
 SECRET_PATTERNS = [
     # Generic PEM-style key block header -- already covers RSA/EC/OPENSSH/ENCRYPTED/PGP variants
