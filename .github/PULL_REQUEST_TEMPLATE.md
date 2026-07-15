@@ -10,7 +10,7 @@
 - [ ] README has: What it is · Input/output contract · Run locally · Cloud-verify only
 - [ ] No secrets in `config/` (placeholders only) — `make check` passes
 - [ ] `make lint` passes
-- [ ] Reviewed and approved by the mentor
+- [ ] Reviewed and approved by the tech lead
 
 ## Local verification output
 <!-- Paste the `make lint check test` output. -->

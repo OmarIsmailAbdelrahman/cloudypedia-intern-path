@@ -1,39 +1,26 @@
 # Clinical Data Platform — Engagement Build
+---
 
-> A hands-on data-engineering program. You will build a real end-to-end data platform for a client,
-> one stage at a time, on Google Cloud.
+## Engagement Overview
+
+We are a data-solutions consultancy. Large organizations bring us their highest-volume, most sensitive data
+problems — the ones where confidentiality, professionalism, and deep domain understanding are non-negotiable —
+and trust us to deliver production-grade systems end to end.
+
+Our current engagement is with a national health authority. The authority collects data from a network of
+source hospitals but has no unified way to process, trust, or report on it, and it has contracted us to design
+and build that platform: the full ETL and reporting infrastructure that turns scattered source data into a
+single, governed, query-ready foundation for analytics. To get us started, the client delivered a
+representative extract to a Cloud Storage bucket for us to work against.
+
+Our deliverable is a working platform that carries this data from raw source all the way to trustworthy
+reporting — ingestion, storage, quality, orchestration, transformation, analytics, and the reporting layer on
+top. Each stage below is one part of that platform; its objective, tools, and tasks are described in the stage
+itself.
 
 ---
 
-## The project
-
-**Who we are.** We are a data-solutions consultancy. We take on large organizations with high-volume data,
-where **confidentiality, professionalism, and domain understanding** are non-negotiable.
-
-**The engagement.** A **national health authority** has contracted us to build their **ETL and reporting
-infrastructure**. The authority collects clinical data from **source hospitals** and today has no unified way
-to process, trust, or report on it. Our job is to stand up that platform end to end.
-
-**What the client gave us.** To get us moving, the authority delivered a **representative extract of the data
-in a Cloud Storage bucket** — real-shape hospital and ICU records (patients, admissions, ICU stays, vitals,
-labs, medications, diagnoses). Two things are true of this data, and they shape everything we build:
-
-- **It is messy.** Like all real clinical data, it carries data-quality problems — bad formats, impossible
-  values, missing links, duplicates. Part of our job is to *find and handle* them, not assume clean input.
-- **It is sensitive.** It is patient health information. Confidential handling and governance are a
-  requirement at every stage, not an afterthought.
-
-**Our deliverable.** A working platform that turns this raw extract into **trustworthy, query-ready reporting**
-— ingestion, storage, quality, orchestration, transformation, analytics, and the reporting layer on top.
-
-> **One thing we do *not* hand you: the reporting model.** The analytics/semantic layer is designed the way
-> real practitioners do it — in a **working session with your mentor, building a Kimball bus matrix** to decide
-> the business processes, grain, facts, and dimensions. That stage gives you the *method*, not the answer.
-> Every other stage comes with an explicit objective for what it must deliver.
-
----
-
-## How a data system looks
+## Reference Architecture
 
 Before the tools, the shape. Almost every data platform is the same handful of layers — data flows left to
 right, with two concerns running underneath the whole thing:
@@ -47,28 +34,29 @@ right, with two concerns running underneath the whole thing:
                         └────────────────────────────────────┘
 ```
 
-| Layer | What it is responsible for | You build it in |
-|---|---|---|
-| **Ingestion** | Get source data into the platform reliably | [`01-ingestion`](templates/01-ingestion/) |
-| **Storage & modeling** | Land the data in the warehouse and shape it for analytics | [`02-bigquery`](templates/02-bigquery/) |
-| **Quality & governance** | Profile, validate, catch bad data; govern sensitive data | [`03-dataplex`](templates/03-dataplex/) |
-| **Orchestration** | Schedule and coordinate the whole pipeline | [`04-airflow`](templates/04-airflow/) |
-| **Processing at scale** | Transform large volumes of data efficiently | [`05-dataflow`](templates/05-dataflow/) |
-| **Machine learning** | Build and serve a predictive model on the data | [`06-vertex`](templates/06-vertex/) |
-| **Reporting (BI)** | Dashboards and self-serve analytics for the client | [`07-looker`](templates/07-looker/) |
-| **Custom visualization** | Bespoke views beyond what BI tools give you | [`08-custom-viz`](templates/08-custom-viz/) |
+| Layer | What it is responsible for |
+|---|---|
+| **Ingestion** | Get source data into the platform reliably |
+| **Storage & modeling** | Land the data in the warehouse and shape it for analytics |
+| **Quality & governance** | Profile, validate, and catch bad data; govern sensitive data |
+| **Orchestration** | Schedule and coordinate the whole pipeline |
+| **Processing at scale** | Transform large volumes of data efficiently |
+| **Machine learning** | Build and serve a predictive model on the data |
+| **Reporting (BI)** | Dashboards and self-serve analytics for the client |
+| **Custom visualization** | Bespoke views beyond what standard BI tools provide |
 
 ---
 
-## The pipeline — navigation
+## Pipeline Stages
 
-Each stage is its own folder with a README that states the **goal**, the **tools** and **why**, **alternative
-tools**, and its **task tracking**. Start at 01 and work down; each builds on the last.
+Each stage has a folder with an overview, and is fully specified in the
+[Stage Playbook](standards/STAGE_PLAYBOOK.md). Work them in dependency order — not everything is strictly
+sequential (see the rules) — starting with Ingestion.
 
 | # | Stage | Tool | What you'll deliver |
 |---|---|---|---|
 | 01 | [Ingestion](templates/01-ingestion/) | Cloud Storage | Land the client's data extract into our platform, reliably and repeatably |
-| 02 | [Storage & modeling](templates/02-bigquery/) | BigQuery | Warehouse the data and design the analytics model *(Kimball bus matrix, with mentor)* |
+| 02 | [Storage & modeling](templates/02-bigquery/) | BigQuery | Warehouse the client's data and shape it for analytics |
 | 03 | [Quality & governance](templates/03-dataplex/) | Dataplex | Profile and validate the data; surface the quality issues; govern sensitive fields |
 | 04 | [Orchestration](templates/04-airflow/) | Cloud Composer (Airflow) | Schedule and wire the pipeline into one coordinated run |
 | 05 | [Processing at scale](templates/05-dataflow/) | Dataflow (Beam) | Process large data volumes with a scalable transform |
@@ -78,9 +66,9 @@ tools**, and its **task tracking**. Start at 01 and work down; each builds on th
 
 ---
 
-## Build status
+## Build Status
 
-Track progress here — one row per stage. (`⬜ not started · 🟡 in progress · ✅ approved by mentor`)
+Track progress here — one row per stage. (`⬜ not started · 🟡 in progress · ✅ approved by the tech lead`)
 
 | Stage | Status |
 |---|---|
@@ -95,33 +83,49 @@ Track progress here — one row per stage. (`⬜ not started · 🟡 in progress
 
 ---
 
-## How you'll work
+## Rules of Engagement
 
-- **Stage by stage.** Build in order. Don't jump ahead — each stage depends on the one before it.
-- **Local-first.** Everything is designed to build and run on your machine; cloud work is supervised.
-- **Confidentiality always.** Treat the data as real patient information. Governance and careful handling
-  are part of the grade, not a bonus.
-- **The mentor approves.** Open a pull request when a stage is done; your **mentor reviews and approves** it
-  (not another intern). A stage is ✅ only after that approval.
-- **Requirements can change.** Like any real engagement, the client's needs can evolve mid-project. Build for
-  change, not just for today's spec.
+These are not guidelines — they are the terms of the program.
+- **Cloud costs money — check before you spin up.** Before using any cloud resource, read its instructions and
+  follow the steps exactly, and **always calculate the cost first**. Never provision anything you have not
+  costed and been cleared to run.
+- **No AI, at any step.** AI tools may not be used in any part of this work: not for designing, building,
+  writing, or debugging, and **not for searching or research**. Do the thinking and the work yourself — that
+  is the entire point of the program.
+- **Communicate — stages are shared and interdependent.** Several people may work on different parts of the
+  same stage, and those parts depend on one another. Coordinate continuously, agree on interfaces early, and
+  do not treat your part as finished until the pieces that depend on it are unblocked.
+- **Confidentiality always.** Treat every record as real patient health information. Keep the data inside the
+  sanctioned environment and never commit data or secrets to the repository.
+- **Follow the dependency order.** The stages form a pipeline, not a strict 1-to-8 line — some must be built
+  before others, but not all are sequential. Before you start a piece, know what it depends on.
+- **The tech lead approves.** Open a pull request when a part is done; the **project's tech lead reviews and
+  approves** it (not another intern). A stage is ✅ only after that approval.
+---
+
+## Getting Started
+
+```bash
+git clone <this-repo> && cd cloudypedia-intern-path
+```
+
+New here? Start with the **[Intern Guide](docs/INTERN_ONBOARDING.md)** — it covers setup, the rules, how the
+stages fit together, and how you'll work. Then go to [**Stage 01 — Ingestion**](templates/01-ingestion/) and begin.
 
 ---
 
-## Getting started
+## Data & Attribution
 
-```bash
-git clone <this-repo> && cd <this-repo>
-make setup            # install dev deps (Python 3.11+)
-pre-commit install    # enable checks before each commit
-make lint check test  # should be green
-```
+The dataset used throughout this program is adapted from **MIMIC-IV (v3.1)** — the *Medical Information Mart
+for Intensive Care*, a large, de-identified database of hospital and ICU records curated by the MIT Laboratory
+for Computational Physiology and distributed through PhysioNet. It has been sampled and adapted for this
+engagement so that it stands in for the client's extract.
 
-Then read, in order:
-[`docs/INTERN_ONBOARDING.md`](docs/INTERN_ONBOARDING.md) →
-[`standards/TEMPLATE_ANATOMY.md`](standards/TEMPLATE_ANATOMY.md) →
-[`standards/CONVENTIONS.md`](standards/CONVENTIONS.md) →
-[`CONTRIBUTING.md`](CONTRIBUTING.md), and open the worked example at
-[`templates/00-reference/hello-pipeline`](templates/00-reference/hello-pipeline).
+MIMIC-IV is released under the **PhysioNet Credentialed Health Data License**. Treat it as sensitive data, use
+it only for this program, and cite it in any work derived from it:
 
-Then go to [**Stage 01 — Ingestion**](templates/01-ingestion/) and begin.
+> Johnson, A., Bulgarelli, L., Pollard, T., Gow, B., Moody, B., Horng, S., Celi, L. A., & Mark, R. (2024).
+> MIMIC-IV (version 3.1). PhysioNet. https://doi.org/10.13026/kpb9-mt58
+>
+> Johnson, A. E. W., Bulgarelli, L., Shen, L., et al. (2023). MIMIC-IV, a freely accessible electronic health
+> record dataset. *Scientific Data*, 10, 1. https://doi.org/10.1038/s41597-022-01899-x

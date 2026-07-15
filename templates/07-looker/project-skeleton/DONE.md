@@ -5,5 +5,5 @@
 - [ ] Smoke test passes locally (`python -m pytest tests -q`).
 - [ ] README complete with all four required sections.
 - [ ] `config/` has no secrets (placeholders only).
-- [ ] Reviewed and approved by your mentor.
+- [ ] Reviewed and approved by the tech lead.
 - [ ] (Optional) Cloud-verify step logged, if platform access was available.

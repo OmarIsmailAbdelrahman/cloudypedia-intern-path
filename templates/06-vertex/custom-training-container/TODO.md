@@ -5,7 +5,7 @@ This folder is a **scaffold** for you to implement. It is one of your stage's te
 ## How to start
 1. Read this folder's `README.md` — it is the **target**: what this template must do, its
    input/output contract, and what stays "cloud-verify only".
-2. Check your **GitHub issue** (your mentor's brief) for the modes/methods and **corner cases**
+2. Check your **GitHub issue** (the tech lead's brief) for the modes/methods and **corner cases**
    this template must handle.
 3. Look at `templates/00-reference/hello-pipeline/` for the shape, and at
    `standards/TEMPLATE_ANATOMY.md` + `standards/CONVENTIONS.md` for the rules.

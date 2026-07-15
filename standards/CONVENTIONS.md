@@ -9,7 +9,7 @@
 - Fake secrets locally via env vars / mounted keys / ADC. The conformance checker scans for leaked secrets.
 
 ## Git & review
-- One template per PR. Reviewed and approved by your mentor against this file before merge.
+- One template per PR. Reviewed and approved by the tech lead against this file before merge.
 - Commit after each work-unit with a full, rollback-friendly message. Don't push unless asked; branch first
   if on the default branch.
 

@@ -16,4 +16,4 @@ labels: ["type:template"]
 <!-- From the design spec's per-stage detail. -->
 
 ## Definition of done
-- [ ] Local run · sample I/O · smoke test · README sections · no secrets · mentor-approved
+- [ ] Local run · sample I/O · smoke test · README sections · no secrets · tech-lead-approved
