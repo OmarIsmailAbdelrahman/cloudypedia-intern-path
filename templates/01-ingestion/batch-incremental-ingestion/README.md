@@ -1,51 +1,60 @@
-# Task — Ingest the recurring batches (incremental)
+# Task — Ingest Recurring Batches (Incremental)
 
 ## Goal
-Keep the warehouse current as new batches arrive — folding each one into a table that keeps growing, without
-ever double-counting or clobbering rows that are already correct.
+Fold each newly arriving batch into the existing warehouse tables — updating changed rows and inserting new
+ones — without ever double-counting or overwriting rows that are already correct, and run it on a schedule.
 
-## Context & scope
-The initial export was a one-off; real operations don't stop. The client keeps sending batches, and each one
-has to join what's already loaded. This is where the skill diverges from the initial load: that task REPLACED
-the whole table, so re-running it was idempotent by truncation. You can't do that here — the table already
-holds history you must keep, so a batch has to be reconciled row by row against what's there: insert the rows
-that are new, update the ones that changed, leave the rest untouched. Build ingestion that does exactly that,
-idempotently — safe to re-run, safe to replay a batch you already applied, with the same row count either way.
+## Context & Scope
+The initial export was a one-time snapshot; the client continues to deliver operational data as recurring
+batches, and each must be integrated with what is already loaded. This differs fundamentally from the initial
+load: that task *replaced* the whole table (idempotent by truncation), which is not viable here because the
+target already holds history that must be preserved. Each batch must instead be reconciled against the existing
+rows — insert the new rows, update the changed ones, leave the rest untouched — idempotently, so that replaying
+an already-applied batch yields the same row count.
 
-The self-contained way to do this cleanly, without pulling in later stages: land each incoming batch with
-`bq load` into a **transient load table** in your dataset (its own table, e.g. `<table>__load`, truncated and
-refilled each run), then run a single `MERGE` from that load table into the target keyed on the natural key.
-Loading into a throwaway table first keeps the raw batch isolated so a bad file can't half-write the target,
-and gives `MERGE` a clean set-based source to reconcile against in one atomic statement. `MERGE` is the point
-of the task: one `WHEN MATCHED ... THEN UPDATE` / `WHEN NOT MATCHED ... THEN INSERT` pass is idempotent by
-construction — replaying the same batch matches every row and changes nothing, so there is no double-count on
-replay. Partition the target on a natural date/time column so each `MERGE` prunes to the affected partitions
-instead of rewriting the whole table — cheaper every time a batch lands, which matters because this runs
-forever. Drop the load table when you're done, or overwrite it on the next run. You keep everything in one
-dataset; a dedicated staging dataset is a later refinement, not a requirement here.
+Implement this self-contained, without depending on later stages: land each incoming batch with `bq load` into a
+**transient load table** in your dataset (e.g. `<table>__load`, truncated and refilled each run), then run a
+single `MERGE` from that load table into the target, keyed on the natural key. Loading into a throwaway table
+first isolates the raw batch so a malformed file cannot partially write the target, and gives `MERGE` a clean
+set-based source. A single `WHEN MATCHED THEN UPDATE` / `WHEN NOT MATCHED THEN INSERT` pass is idempotent by
+construction. Partition the target on a natural date/time column so each `MERGE` prunes to the affected
+partitions instead of rewriting the whole table.
 
-## Inputs & names
-Batch files under `gs://internship-preperation/Dataset/batch/<table>/*`, in the same per-table sharded shape as
-the initial export.
+Then run it unattended: the simplest managed option is a **Cloud Run job** that executes your script, triggered
+by **Cloud Scheduler** on a cron. A Cloud Run job runs to completion and exits, which fits a batch that fires,
+loads, merges, and stops. (A dedicated staging dataset and a full orchestrator with dependencies and retries are
+later refinements, not requirements here.)
 
-## Output & expectations
-Tables that hold the initial data plus every batch merged in — no duplicates, no damage when a batch is
-re-run, and identical row counts whether a given batch was applied once or twice. You deliver the
-batch-ingestion script(s): the `bq load` into the transient load table plus the `MERGE` into the target,
-per table.
+## Inputs & Configuration
+- **Project:** `<your-project-id>`
+- **Source Bucket:** `gs://internship-preperation/Dataset/batch/` (same per-table sharded shape as the initial
+  export, `<table>/*`)
+- **Target Dataset:** `<your dataset>` (the tables produced by the initial-load task)
+- **Transient Load Table:** `<table>__load` (in the same dataset)
 
-Then make it run unattended on a cadence. The simplest managed way, with no standing infrastructure to babysit,
-is a **Cloud Run job** that executes your script, triggered by **Cloud Scheduler** on a cron. A Cloud Run job
-runs to completion and exits (unlike a service that stays up waiting for requests), which is the right shape
-for a batch that fires, loads, merges, and stops; Cloud Scheduler is a plain managed cron that invokes it on
-schedule so nobody has to launch it by hand. What you learn here is the pair of skills every ingestion
-pipeline needs: incremental upsert ingestion, and running a job on a schedule. (A full orchestrator with
-dependencies and retries is a better fit once pipelines get complex — that's a later stage, not this one.)
+## Output & Deliverables
+- Target tables holding the initial data plus every batch merged in — no duplicates, and identical row counts
+  whether a given batch is applied once or replayed.
+- The batch-ingestion script(s) in `scripts/`: the `bq load` into the transient load table and the `MERGE` into
+  the target, per table.
+- A scheduled trigger (Cloud Run job invoked by Cloud Scheduler) that runs the load unattended on a cadence.
 
-## Bonus
+## Technical Constraints & Anti-Boilerplate Rules
+- **Idempotency is required.** Replaying a batch that was already applied must not change the row count. Achieve
+  this with a natural-key `MERGE`, not by appending.
+- **No truncate-and-replace.** The target holds history; reconcile row by row. Do not reload the whole table as
+  the initial-load task did.
+- **Zero hardcoding.** Discover table names dynamically from the source structure; do not write one load/merge
+  pair per table by hand.
+- **Partition-pruned merges.** Partition the target on its natural date/time key so each `MERGE` touches only the
+  affected partitions rather than rewriting the table.
+- **Fault tolerance.** If one table fails, log it and continue with the rest; never abort the entire batch for a
+  single failure.
+
+## Bonus Objectives
 - Reuse the parallel-load and skip-on-failure approach from the initial-load task.
-- Handle a batch that redelivers rows from a previous batch (overlapping keys) — the `MERGE` should still land
-  at the correct row count.
+- Handle a batch that redelivers rows from a previous batch (overlapping keys) so the `MERGE` still lands at the
+  correct row count.
 
 ## References
 - Batch loading data (`bq load`, `WRITE_TRUNCATE` for the load table) — https://cloud.google.com/bigquery/docs/batch-loading-data
@@ -53,9 +62,3 @@ dependencies and retries is a better fit once pipelines get complex — that's a
 - Partitioned tables — https://cloud.google.com/bigquery/docs/partitioned-tables
 - Cloud Run jobs — https://cloud.google.com/run/docs/create-jobs
 - Trigger a Cloud Run job on a schedule with Cloud Scheduler — https://cloud.google.com/run/docs/execute/jobs-on-schedule
-
-## Config & naming
-- Project: `<your-project-id>`
-- Source bucket: `gs://internship-preperation/Dataset/batch/`
-- Dataset: `<your dataset>`
-- Transient load table: `<table>__load` (in the same dataset)

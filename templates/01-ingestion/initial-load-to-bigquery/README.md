@@ -15,7 +15,7 @@ Move the entire snapshot into BigQuery, one BigQuery table per source folder. Lo
 dataset — do **not** build an intermediary "raw" staging area. Reach for BigQuery's own load jobs (`bq load`):
 they're serverless, read the sharded files straight out of Cloud Storage through a single URI wildcard, and can
 autodetect the schema — exactly the right weight for a one-shot bulk move, with no pipeline to stand up and no
-cluster to babysit.
+cluster to manage.
 
 ## Inputs & Configuration
 - **Project:** `<your-project-id>`
