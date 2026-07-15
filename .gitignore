@@ -66,6 +66,14 @@ out/
 # ─── Mentor-only, private — NEVER push to the interns' repo ──
 mentor-docs/
 
+# ─── Stages 03-08: not ready — excluded until the tech lead says to include them ──
+templates/03-dataplex/
+templates/04-airflow/
+templates/05-dataflow/
+templates/06-vertex/
+templates/07-looker/
+templates/08-custom-viz/
+
 # ─── OS & editor ─────────────────────────────────────────
 .DS_Store
 Thumbs.db

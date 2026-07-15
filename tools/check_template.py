@@ -5,13 +5,23 @@ import re
 import sys
 from pathlib import Path
 
-REQUIRED_DIRS = ["src", "local", "sample_data", "config", "tests", "docs"]
+# Two flavors. A folder with a `src/` dir is a legacy "code" template (old anatomy);
+# anything else is the new "cloud-ops" task folder (scope README + scripts + docs).
 REQUIRED_FILES = ["README.md", "DONE.md"]
-REQUIRED_README_SECTIONS = [
+
+REQUIRED_DIRS_CODE = ["src", "local", "sample_data", "config", "tests", "docs"]
+REQUIRED_SECTIONS_CODE = [
     "## What it is",
     "## Input/output contract",
     "## Run locally",
     "## Cloud-verify only",
+]
+
+REQUIRED_DIRS_OPS = ["scripts", "docs"]
+REQUIRED_SECTIONS_OPS = [
+    "## Goal",
+    "## Scope of work",
+    "## Output",
 ]
 SECRET_PATTERNS = [
     # Generic PEM-style key block header -- already covers RSA/EC/OPENSSH/ENCRYPTED/PGP variants
@@ -28,7 +38,13 @@ def check_template(path) -> list[str]:
     path = Path(path)
     violations: list[str] = []
 
-    for d in REQUIRED_DIRS:
+    # Flavor: legacy "code" template if it has a src/ dir, else new "cloud-ops" task.
+    if (path / "src").is_dir():
+        required_dirs, required_sections = REQUIRED_DIRS_CODE, REQUIRED_SECTIONS_CODE
+    else:
+        required_dirs, required_sections = REQUIRED_DIRS_OPS, REQUIRED_SECTIONS_OPS
+
+    for d in required_dirs:
         if not (path / d).is_dir():
             violations.append(f"missing required directory: {d}/")
     for f in REQUIRED_FILES:
@@ -38,7 +54,7 @@ def check_template(path) -> list[str]:
     readme = path / "README.md"
     if readme.is_file():
         text = readme.read_text(encoding="utf-8", errors="ignore").lower()
-        for section in REQUIRED_README_SECTIONS:
+        for section in required_sections:
             if section.lower() not in text:
                 violations.append(f"README.md missing section: {section}")
 

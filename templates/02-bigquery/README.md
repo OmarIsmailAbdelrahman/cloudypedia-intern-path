@@ -6,14 +6,13 @@ reporting model itself is built later, in Looker.)*
 
 **Teaches:** BigQuery datasets · partitioning & clustering · staging patterns · `MERGE` / SCD · streaming inserts.
 
-**Tasks**
-1. Dataset & tier design
-2. Staging dataset  *(needed by Stage 01, Task 4)*
-3. Streaming landing  *(needed by Stage 01, Task 5)*
-4. SCD / upsert MERGE
-5. Curated / transform layer
-6. Query cookbook
+**Tasks** — each folder holds its full scope:
+1. [Dataset & tier design](dataset-and-tier-design/)
+2. [Staging dataset](staging-dataset/)  *(needed by Stage 01 · batch ingestion)*
+3. [Streaming landing](streaming-landing/)  *(needed by Stage 01 · streaming ingestion)*
+4. [SCD / upsert MERGE](scd-upsert-merge/)
+5. [Curated / transform layer](curated-transform-layer/)
+6. [Query cookbook](query-cookbook/)
 
-**Full scope of each task** is in
-[Stage 02 of the Stage Playbook](../../standards/STAGE_PLAYBOOK.md). Read the
-[Intern Guide](../../docs/INTERN_ONBOARDING.md) before you start.
+Read the [Intern Guide](../../docs/INTERN_ONBOARDING.md) before you start. How a stage is built:
+[Stage Playbook](../../standards/STAGE_PLAYBOOK.md).
